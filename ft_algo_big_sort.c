@@ -83,37 +83,46 @@ static void	ft_push_b_max(t_stack *stack, int max, int top, int bot)
 	push(&stack->a, &stack->b, 3);
 }
 
-static void	ft_push_b(t_stack *stack)
+static void	ft_push_b(t_stack *stack, int max, int i)
 {
-	int	max;
 	int	top;
 	int	bot;
-	int	i;
 
-	i = 0;
-	max = ft_len_lst(&stack->b) - 1;
 	while (max + 1 != 0)
 	{
-		while (i != 2)
-		{	
-			top = ft_top_max(max - 1, stack);
-			bot = ft_bottom_max(max - 1, stack);
-			ft_push_b_max(stack, max - 1, top, bot);
+		if (max == 0)
+		{
+			push(&stack->a, &stack->b, 3);
 			ft_swap_a_max(stack);
-			i++;
+			max = max - 1;
 		}
-		i = 0;
-		max = max - 2;
+		else
+		{
+			while (i != 2)
+			{	
+				top = ft_top_max(max - 1, stack);
+				bot = ft_bottom_max(max - 1, stack);
+				ft_push_b_max(stack, max - 1, top, bot);
+				ft_swap_a_max(stack);
+				i++;
+			}
+			i = 0;
+			max = max - 2;
+		}
 	}
 }
 
 void	ft_all_sort(t_stack *stack)
 {
 	int	cut;
-	int	len;
+	int	len_a;
+	int	len_b;
+	int	i;
 
-	len = ft_len_lst(&stack->a);
-	cut = ft_cut_size(len);
+	i = 0;
+	len_a = ft_len_lst(&stack->a);
+	cut = ft_cut_size(len_a);
 	ft_push_a_value(stack, cut);
-	ft_push_b(stack);
+	len_b = ft_len_lst(&stack->b) - 1;
+	ft_push_b(stack, len_b, i);
 }
